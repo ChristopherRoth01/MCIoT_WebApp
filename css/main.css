@@ -1,0 +1,53 @@
+/*
+General
+ */
+html, body {
+    height: 100%;
+}
+h1,h2,h3,h4,h5,h6,p,span, button{
+    font-family: Quicksand;
+}
+h1 {
+    font-weight: 700;
+}
+
+/*
+Classes
+ */
+.full-height {
+height: 100%;
+}
+
+.center {
+    position: relative;
+}
+
+/*
+IDs
+ */
+#start {
+    padding: 100px;
+    font-size: 50px;
+    font-weight: bold;
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#start:hover {
+    background-color: #761c19;
+}
+
+#startDiv {
+
+
+}
+
+
+
+
+/*
+Responsive stuff
+ */
