@@ -3,12 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <title>HTML5 Features</title>
-    <style type="text/css">html,body {margin: 0;padding: 0;overflow: hidden}</style>
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="/css/main.css">
 </head>
 <body>
-    <div id="webgl"></div>
+    <div id="startDiv" class="container">
+        <button class="btn btn-primary" id="start">Start</button>
+    </div>
+    <div id="webgl" style="display: none"></div>
     <script src="/lib/three.js"></script>
     <script src="/lib/controls/OrbitControls.js"></script>
-    <script src="main.js"></script>
+    <script src="/lib/main.js"></script>
 </body>
 </html>
