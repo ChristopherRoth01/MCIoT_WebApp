@@ -1,3 +1,27 @@
+/**
+ * The Renderer of the Scene.
+ * @type {WebGLRenderer}
+ */
+const renderer = new THREE.WebGLRenderer();
+/**
+ * The scene, which gets rendered by the @renderer.
+ * @type {Scene}
+ */
+const scene = new THREE.Scene();
+/**
+ * Dimensions of the Floor.
+ * @type {number}
+ */
+const floorWidth = 100;
+const floorDepth = 100;
+
+/**
+ * scene has in this case only one floor.
+ * @type {Mesh}
+ */
+const floor = generateFloor(floorWidth, floorDepth);
+
+
 document.getElementById("start").addEventListener("click", function () {
     main();
     document.getElementById("startDiv").style = "display:none;";
@@ -8,8 +32,7 @@ document.getElementById("start").addEventListener("click", function () {
  * Main function. Builds first Scene with three.js
  */
 function main() {
-    let scene = new THREE.Scene();
-    let floor = generateFloor(100, 100);
+
     floor.name = "floor";
     floor.rotation.x = Math.PI / 2;
 
@@ -19,7 +42,6 @@ function main() {
     floor.add(sphere);
     let pointLight = generatePointLight(0xffffff, 2);
     pointLight.position.y = 10;
-
     scene.add(floor);
     scene.add(pointLight);
 
@@ -29,7 +51,6 @@ function main() {
     camera.position.z = 10;
     camera.lookAt(new THREE.Vector3(0, 0, 0));
 
-    let renderer = new THREE.WebGLRenderer();
     renderer.shadowMap.enabled = true;
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setClearColor('rgb(255,255,255)');
@@ -57,62 +78,13 @@ function generateFloor(w, d) {
     return mesh;
 }
 
-/**
- * Generates a box.
- * @param w width
- * @param h height
- * @param d depth
- * @param x position-x
- * @param y position-y
- * @param z position-z
- * @returns {Mesh} Box
- */
-function generateBox(w, h, d, x, y, z) {
-    let geo = new THREE.BoxGeometry(w, h, d);
-    let material = new THREE.MeshPhongMaterial({
-        color: 'rgb(0, 100, 100)',
-    });
-    let mesh = new THREE.Mesh(geo, material);
-    mesh.castShadow = true;
-    mesh.position.x = x;
-    mesh.position.y = y;
-    mesh.position.z = z;
-    return mesh;
-}
-
-/**
- * Generates an specific amount of boxes and places them on a floor.
- * @param floor
- * @param w width
- * @param d depth
- * @param h height
- * @param dx the distance between the the boxes on x-axis
- * @param dy distance between the boxes on y-axis.
- */
-function generateBoxes(floor, rows, cols, w, h, d, dx, dy, start, end, z) {
-    for(let i = start; i < rows + start; i++) {
-        for(let j = end; j < cols + end ;j++) {
-            let box = generateBox(w,h,d,i*dx,j*dy, z);
-            floor.add(box);
-        }
-    }
-}
-
-/**
- * The Lighter for the hole scenery
- */
-function generatePointLight(color, intensity) {
-    let light = new THREE.PointLight(color, intensity);
-    light.castShadow = true;
-    return light;
-}
 
 function generateSphere(radius, widthSegments, heightSegments) {
-    const geometry = new THREE.SphereGeometry(radius, widthSegments, heightSegments);
-    const material = new THREE.MeshBasicMaterial( {
+    let geometry = new THREE.SphereGeometry(radius, widthSegments, heightSegments);
+    let material = new THREE.MeshBasicMaterial( {
         color: 0xffff00
     } );
-    const sphere = new THREE.Mesh( geometry, material );
+    let sphere = new THREE.Mesh( geometry, material );
     return sphere;
 }
 
@@ -125,10 +97,8 @@ function generateSphere(radius, widthSegments, heightSegments) {
 function update(renderer, scene, camera, controls) {
     renderer.render(scene, camera);
     let floor = scene.getObjectByName('floor');
-//    scene.children[0].rotation.y += 0.002;
-  //  floor.rotation.z += 0.0005;
     scene.traverse(function (child) {
-      //  child.position.x += 0.01;
+
     });
 
     controls.update();
