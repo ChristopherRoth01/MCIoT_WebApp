@@ -108,3 +108,28 @@ function update(renderer, scene, camera, controls) {
     );
 }
 
+const loader = new FontLoader();
+
+loader.load( '/font/Quicksand_Bold.json', function ( font ) {
+
+    const geometry = new TextGeometry( 'Hello three.js!', {
+        font: font,
+        size: 80,
+        height: 5,
+        curveSegments: 12,
+        bevelEnabled: true,
+        bevelThickness: 10,
+        bevelSize: 8,
+        bevelOffset: 0,
+        bevelSegments: 5
+    });
+    const textMesh = new THREE.Mesh(geometry, [
+        new THREE.MeshPhongMaterial({color: 0xad4000}),
+        new THREE.MeshPhongMaterial({color: 0x5c2301})
+    ])
+    textMesh.castShadow = true;
+    textMesh.positionZ= -10;
+    floor.add(textMesh);
+    console.log("text hinzugefügt!");
+
+});
