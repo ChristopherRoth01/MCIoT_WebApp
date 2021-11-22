@@ -1,3 +1,10 @@
+/**
+ * Third Party file.
+ * Enables drag&pull controls.
+ *
+ */
+
+
 ( function () {
 
 	// Unlike TrackballControls, it maintains the "up" direction object.up (+Y by default).
