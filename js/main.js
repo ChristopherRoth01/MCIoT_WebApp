@@ -16,12 +16,20 @@ const floorWidth = 100;
 const floorDepth = 100;
 
 /**
+ * Lighting options.
+ */
+const pointLight = generatePointLight(0xffffff, 2);
+const ambientLight = generateAmbientLighting(0xffffff, 1);
+/**
  * scene has in this case only one floor.
  * @type {Mesh}
  */
 const floor = generateFloor(floorWidth, floorDepth);
 
-
+const gui = new dat.GUI();
+/**
+ * Code Block responsible for switching to the 3D-World.
+ */
 document.getElementById("start").addEventListener("click", function () {
     main();
     document.getElementById("startDiv").style = "display:none;";
@@ -36,19 +44,22 @@ function main() {
     floor.name = "floor";
     floor.rotation.x = Math.PI / 2;
 
-    generateBoxes(floor, 10, 10, 2,2,2, 3, 3, 0, 0, -2);
+    // generateBoxes(floor, 10, 10, 2,2,2, 3, 3, 0, 0, -2);
 
-    let sphere = generateSphere( 10, 60, 60);
+    let sphere = generateSphere( 2, 60, 60);
+    sphere.position.y =  10;
+    sphere.position.z = -10;
     floor.add(sphere);
-    let pointLight = generatePointLight(0xffffff, 2);
+    ambientLight.positionY = 10;
     pointLight.position.y = 10;
+    gui.add(ambientLight, 'intensity', 0.02);
     scene.add(floor);
-    scene.add(pointLight);
+    scene.add(ambientLight);
 
     let camera = new THREE.PerspectiveCamera(45, window.innerWidth/ window.innerHeight, 1, 1000);
-    camera.position.x = 1;
-    camera.position.y = 5;
-    camera.position.z = 10;
+    camera.position.x = 10;
+    camera.position.y = 50;
+    camera.position.z = 100;
     camera.lookAt(new THREE.Vector3(0, 0, 0));
 
     renderer.shadowMap.enabled = true;
@@ -56,9 +67,7 @@ function main() {
     renderer.setClearColor('rgb(255,255,255)');
     document.getElementById("webgl").appendChild(renderer.domElement);
 
-    let controls = new THREE.OrbitControls(camera, renderer.domElement);
-
-    update(renderer, scene, camera, controls);
+    update(renderer, scene, camera);
     return scene;
 }
 
@@ -94,16 +103,15 @@ function generateSphere(radius, widthSegments, heightSegments) {
  * @param scene
  * @param camera
  */
-function update(renderer, scene, camera, controls) {
+function update(renderer, scene, camera) {
     renderer.render(scene, camera);
     let floor = scene.getObjectByName('floor');
     scene.traverse(function (child) {
-
+        //here you could add some movement
     });
 
-    controls.update();
     requestAnimationFrame(function () {
-        update(renderer, scene, camera, controls);
+        update(renderer, scene, camera);
         }
     );
 }
