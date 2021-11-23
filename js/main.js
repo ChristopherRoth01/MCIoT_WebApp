@@ -8,6 +8,7 @@ const renderer = new THREE.WebGLRenderer();
  * @type {Scene}
  */
 const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(45, window.innerWidth/ window.innerHeight, 1, 1000);
 /**
  * Dimensions of the Floor.
  * @type {number}
@@ -25,7 +26,7 @@ const ambientLight = generateAmbientLighting(0xffffff, 1);
  * @type {Mesh}
  */
 const floor = generateFloor(floorWidth, floorDepth);
-
+const sphere = generateSphere( 2, 60, 60);
 const gui = new dat.GUI();
 /**
  * Code Block responsible for switching to the 3D-World.
@@ -46,7 +47,7 @@ function main() {
 
     // generateBoxes(floor, 10, 10, 2,2,2, 3, 3, 0, 0, -2);
 
-    let sphere = generateSphere( 2, 60, 60);
+
     sphere.position.y =  10;
     sphere.position.z = -10;
     floor.add(sphere);
@@ -56,11 +57,10 @@ function main() {
     scene.add(floor);
     scene.add(ambientLight);
 
-    let camera = new THREE.PerspectiveCamera(45, window.innerWidth/ window.innerHeight, 1, 1000);
+
     camera.position.x = 10;
     camera.position.y = 50;
     camera.position.z = 100;
-    camera.lookAt(new THREE.Vector3(0, 0, 0));
 
     renderer.shadowMap.enabled = true;
     renderer.setSize(window.innerWidth, window.innerHeight);
@@ -103,15 +103,15 @@ function generateSphere(radius, widthSegments, heightSegments) {
  * @param scene
  * @param camera
  */
-function update(renderer, scene, camera) {
+function update(renderer, scene, camera, controls) {
     renderer.render(scene, camera);
-    let floor = scene.getObjectByName('floor');
     scene.traverse(function (child) {
-        //here you could add some movement
-    });
 
+    });
+    camera.lookAt(new THREE.Vector3(sphere.position.x, sphere.position.y , sphere.position.z ));
+    controls.update();
     requestAnimationFrame(function () {
-        update(renderer, scene, camera);
+        update(renderer, scene, camera, controls);
         }
     );
 }

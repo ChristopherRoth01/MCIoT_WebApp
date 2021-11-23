@@ -14,6 +14,5 @@ function generatePointLight(color, intensity) {
  */
 function generateAmbientLighting(color, intensity) {
     let light = new THREE.AmbientLight(color, intensity);
-    light.castShadow = true;
     return light;
 }
