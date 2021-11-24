@@ -11,18 +11,22 @@
 </head>
 <body>
     <div id="startDiv" class="container full-height center">
-        <h1>Herzlich Willkommen zu dieser interaktiven Tour durch alle neuen HTML5 Features!</h1>
+        <h1 id="entry-heading">Herzlich Willkommen zu dieser interaktiven Tour durch alle neuen HTML5 Features!</h1>
         <button class="btn btn-primary" id="start">Start</button>
     </div>
     <div id="webgl" style="display: none"></div>
     <script src="/lib/three/build/three.js"></script>
+    <script type="module" src="/lib/three/build/three.module.js"></script>
     <script src="/js/controls/OrbitControls.js"></script>
     <script src="/lib/three/examples/js/libs/dat.gui.min.js"></script>
     <script src="/js/controls/threex.keyboardstate.js"></script>
+    <script type="module" src="/lib/three/examples/jsm/loaders/FontLoader.js"></script>
+    <script type="module" src="/lib/three/examples/jsm/geometries/TextGeometry.js"></script>
     <script src="/js/objects/box.js"></script>
+    <script src="/js/objects/monitor.js"></script>
     <script src="/js/scene/light/light.js"></script>
     <script src="/js/scene/scene.js"></script>
     <script src="/js/text/text.js"></script>
-    <script src="/js/main.js"></script>
+    <script type="module" src="/js/main.js"></script>
 </body>
 </html>

@@ -1,7 +1,52 @@
+
+const monitorStandGeometry = new THREE.BoxGeometry(1,5,1);
+const screenBackGroundGeometry = new THREE.BoxGeometry(10,5,1);
+const screenGeometry = new THREE.BoxGeometry(9.5,4.5,1);
+
+const materialBlack = new THREE.MeshPhongMaterial({
+    color: 0x000000,
+});
+
+const materialWhite = new THREE.MeshPhongMaterial({
+    color: 0xffffff,
+});
+
+
+function createMonitor() {
+
+    const monitorStand = new THREE.Mesh(monitorStandGeometry, materialBlack);
+    const screenBackGround = new THREE.Mesh(screenBackGroundGeometry, materialBlack);
+    const screen = new THREE.Mesh(screenGeometry, materialWhite);
+    monitorStand.position.x = -1.5;
+    monitorStand.position.y = -2.5;
+    monitorStand.position.z = 1.5;
+
+    screenBackGround.position.x = -1.5;
+    screenBackGround.position.y = 6;
+    screenBackGround.position.z = 2;
+
+    screen.position.x = -1.5;
+    screen.position.y = 6;
+    screen.position.z = 2.01;
+
+    const monitor = new THREE.Mesh();
+    monitor.add(monitorStand);
+    monitor.add(screenBackGround);
+    monitor.add(screen);
+
+
+    return monitor;
+}
+
+
+
 /**
  * The Renderer of the Scene.
  * @type {WebGLRenderer}
  */
+import {FontLoader} from "../lib/three/examples/jsm/loaders/FontLoader.js";
+// import {TextGeometry} from "../lib/three/examples/jsm/geometries/TextGeometry";
+
 const renderer = new THREE.WebGLRenderer();
 /**
  * The scene, which gets rendered by the @renderer.
@@ -30,6 +75,29 @@ const sphere = generateSphere( 2, 60, 60);
 const gui = new dat.GUI();
 //wconst controls = new THREE.OrbitControls(camera, renderer.domElement);
 const keyboard = new THREEx.KeyboardState();
+const loader = new FontLoader();
+const monitor = createMonitor();
+
+loader.load( 'font/Quicksand_Bold.json', function ( font ) {
+
+    let geo = new TextGeometry( 'Hello three.js!', {
+        font: font,
+        size: 80,
+        height: 5,
+        curveSegments: 12,
+        bevelEnabled: true,
+        bevelThickness: 10,
+        bevelSize: 8,
+        bevelOffset: 0,
+        bevelSegments: 5
+    } );
+    let material = new THREE.MeshPhongMaterial({
+        color: 'rgb(255, 165, 0)',
+    });
+    let mesh = new THREE.Mesh(geo, material);
+    scene.add(mesh);
+} );
+
 /**
  * Code Block responsible for switching to the 3D-World.
  */
@@ -58,7 +126,8 @@ function main() {
     gui.add(ambientLight, 'intensity', 0.02);
     scene.add(floor);
     scene.add(ambientLight);
-
+    scene.add(monitor);
+    monitor.position.z = -1;
 
     camera.position.x = 10;
     camera.position.y = 50;
@@ -92,7 +161,7 @@ function generateFloor(w, d) {
 
 function generateSphere(radius, widthSegments, heightSegments) {
     let geometry = new THREE.SphereGeometry(radius, widthSegments, heightSegments);
-    let material = new THREE.MeshBasicMaterial( {
+    let material = new THREE.MeshPhongMaterial( {
         color: 0x000088,
     } );
     let sphere = new THREE.Mesh( geometry, material );

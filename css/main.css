@@ -5,7 +5,7 @@ html, body {
     height: 100%;
 }
 h1,h2,h3,h4,h5,h6,p,span, button{
-    font-family: Quicksand;
+    font-family: Quicksand, serif;
 }
 h1 {
     font-weight: 700;
@@ -34,15 +34,44 @@ IDs
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    animation-delay: 1.5s;
+    animation-duration: 3s;
+    animation-name: fadein;
+    animation-fill-mode: forwards;
+    opacity: 0;
 }
 
 #start:hover {
     background-color: #761c19;
 }
 
-#startDiv {
+#entry-heading {
+    margin-top: 10%;
+    text-align: center;
+    animation-duration: 3s;
+    animation-name: slidein;
+}
 
+/*
+keyframes
+ */
+@keyframes slidein {
+    from {
+        margin-top: 50%;
+    }
+    to {
+        margin-top: 10%;
+    }
+}
 
+@keyframes fadein {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        visibility: visible;
+        opacity: 1;
+    }
 }
 
 
