@@ -13,8 +13,8 @@ const camera = new THREE.PerspectiveCamera(45, window.innerWidth/ window.innerHe
  * Dimensions of the Floor.
  * @type {number}
  */
-const floorWidth = 100;
-const floorDepth = 100;
+const floorWidth = 1000;
+const floorDepth = 1000;
 
 /**
  * Lighting options.
@@ -28,6 +28,8 @@ const ambientLight = generateAmbientLighting(0xffffff, 1);
 const floor = generateFloor(floorWidth, floorDepth);
 const sphere = generateSphere( 2, 60, 60);
 const gui = new dat.GUI();
+//wconst controls = new THREE.OrbitControls(camera, renderer.domElement);
+const keyboard = new THREEx.KeyboardState();
 /**
  * Code Block responsible for switching to the 3D-World.
  */
@@ -91,7 +93,7 @@ function generateFloor(w, d) {
 function generateSphere(radius, widthSegments, heightSegments) {
     let geometry = new THREE.SphereGeometry(radius, widthSegments, heightSegments);
     let material = new THREE.MeshBasicMaterial( {
-        color: 0xffff00
+        color: 0x000088,
     } );
     let sphere = new THREE.Mesh( geometry, material );
     return sphere;
@@ -102,16 +104,28 @@ function generateSphere(radius, widthSegments, heightSegments) {
  * @param renderer
  * @param scene
  * @param camera
+ * @param controls
  */
-function update(renderer, scene, camera, controls) {
+function update(renderer, scene, camera) {
     renderer.render(scene, camera);
     scene.traverse(function (child) {
 
     });
-    camera.lookAt(new THREE.Vector3(sphere.position.x, sphere.position.y , sphere.position.z ));
-    controls.update();
+    camera.lookAt(new THREE.Vector3(sphere.position.x, sphere.position.y , sphere.position.z));
+
+
+    if(keyboard.pressed("A")) {
+        sphere.translateX(0.05);
+    } else if(keyboard.pressed("D")) {
+        sphere.translateX(-0.05);
+    } else if(keyboard.pressed("W")) {
+        sphere.translateY(-0.05);
+    } else if(keyboard.pressed("S")) {
+        sphere.translateY(0.05);
+    }
+
     requestAnimationFrame(function () {
-        update(renderer, scene, camera, controls);
+        update(renderer, scene, camera);
         }
     );
 }
