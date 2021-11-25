@@ -1,7 +1,7 @@
 
-const monitorStandGeometry = new THREE.BoxGeometry(1,5,1);
-const screenBackGroundGeometry = new THREE.BoxGeometry(10,5,1);
-const screenGeometry = new THREE.BoxGeometry(9.5,4.5,1);
+const monitorStandGeometry = new THREE.BoxGeometry(1*2,5*2,1*2);
+const screenBackGroundGeometry = new THREE.BoxGeometry(10*2,5*2,1*2);
+const screenGeometry = new THREE.BoxGeometry(9.5*2,4.5*2,1*2);
 
 const materialBlack = new THREE.MeshPhongMaterial({
     color: 0x000000,
@@ -12,39 +12,11 @@ const materialWhite = new THREE.MeshPhongMaterial({
 });
 
 
-function createMonitor() {
-
-    const monitorStand = new THREE.Mesh(monitorStandGeometry, materialBlack);
-    const screenBackGround = new THREE.Mesh(screenBackGroundGeometry, materialBlack);
-    const screen = new THREE.Mesh(screenGeometry, materialWhite);
-    monitorStand.position.x = -1.5;
-    monitorStand.position.y = -2.5;
-    monitorStand.position.z = 1.5;
-
-    screenBackGround.position.x = -1.5;
-    screenBackGround.position.y = 6;
-    screenBackGround.position.z = 2;
-
-    screen.position.x = -1.5;
-    screen.position.y = 6;
-    screen.position.z = 2.01;
-
-    const monitor = new THREE.Mesh();
-    monitor.add(monitorStand);
-    monitor.add(screenBackGround);
-    monitor.add(screen);
-
-
-    return monitor;
-}
-
-
 
 /**
  * The Renderer of the Scene.
  * @type {WebGLRenderer}
  */
-import {FontLoader} from "../lib/three/examples/jsm/loaders/FontLoader.js";
 // import {TextGeometry} from "../lib/three/examples/jsm/geometries/TextGeometry";
 
 const renderer = new THREE.WebGLRenderer();
@@ -58,9 +30,8 @@ const camera = new THREE.PerspectiveCamera(45, window.innerWidth/ window.innerHe
  * Dimensions of the Floor.
  * @type {number}
  */
-const floorWidth = 1000;
-const floorDepth = 1000;
-
+const floorWidth = 100;
+const floorDepth = 100;
 /**
  * Lighting options.
  */
@@ -73,30 +44,9 @@ const ambientLight = generateAmbientLighting(0xffffff, 1);
 const floor = generateFloor(floorWidth, floorDepth);
 const sphere = generateSphere( 2, 60, 60);
 const gui = new dat.GUI();
-//wconst controls = new THREE.OrbitControls(camera, renderer.domElement);
+//const controls = new THREE.OrbitControls(camera, renderer.domElement);
 const keyboard = new THREEx.KeyboardState();
-const loader = new FontLoader();
-const monitor = createMonitor();
-
-loader.load( 'font/Quicksand_Bold.json', function ( font ) {
-
-    let geo = new TextGeometry( 'Hello three.js!', {
-        font: font,
-        size: 80,
-        height: 5,
-        curveSegments: 12,
-        bevelEnabled: true,
-        bevelThickness: 10,
-        bevelSize: 8,
-        bevelOffset: 0,
-        bevelSegments: 5
-    } );
-    let material = new THREE.MeshPhongMaterial({
-        color: 'rgb(255, 165, 0)',
-    });
-    let mesh = new THREE.Mesh(geo, material);
-    scene.add(mesh);
-} );
+const monitor = new createMonitor();
 
 /**
  * Code Block responsible for switching to the 3D-World.
@@ -111,27 +61,21 @@ document.getElementById("start").addEventListener("click", function () {
  * Main function. Builds first Scene with three.js
  */
 function main() {
-
+    camera.lookAt(0,0,0);
+    camera.position.set(0,10,30);
     floor.name = "floor";
     floor.rotation.x = Math.PI / 2;
-
-    // generateBoxes(floor, 10, 10, 2,2,2, 3, 3, 0, 0, -2);
-
-
-    sphere.position.y =  10;
-    sphere.position.z = -10;
+    sphere.position.z = -2;
     floor.add(sphere);
     ambientLight.positionY = 10;
     pointLight.position.y = 10;
     gui.add(ambientLight, 'intensity', 0.02);
+    gui.add(pointLight, 'intensity', 0.02);
     scene.add(floor);
     scene.add(ambientLight);
+    scene.add(pointLight);
     scene.add(monitor);
     monitor.position.z = -1;
-
-    camera.position.x = 10;
-    camera.position.y = 50;
-    camera.position.z = 100;
 
     renderer.shadowMap.enabled = true;
     renderer.setSize(window.innerWidth, window.innerHeight);
@@ -168,6 +112,32 @@ function generateSphere(radius, widthSegments, heightSegments) {
     return sphere;
 }
 
+
+function createMonitor() {
+
+    const monitorStand = new THREE.Mesh(monitorStandGeometry, materialBlack);
+    const screenBackGround = new THREE.Mesh(screenBackGroundGeometry, materialBlack);
+    const screen = new THREE.Mesh(screenGeometry, materialWhite);
+    monitorStand.position.x = -1.5*2;
+    monitorStand.position.y = 2.5*2;
+    monitorStand.position.z = 1.5*2;
+
+    screenBackGround.position.x = -1.5*2;
+    screenBackGround.position.y = 6*2;
+    screenBackGround.position.z = 2 *2;
+
+    screen.position.x = -1.5*2;
+    screen.position.y = 6*2;
+    screen.position.z = 2.01*2;
+
+    const monitor = new THREE.Group();
+    monitor.add(monitorStand);
+    monitor.add(screenBackGround);
+    monitor.add(screen);
+
+
+    return monitor;
+}
 /**
  * Updates the scenery all the time.
  * @param renderer
@@ -177,21 +147,22 @@ function generateSphere(radius, widthSegments, heightSegments) {
  */
 function update(renderer, scene, camera) {
     renderer.render(scene, camera);
-    scene.traverse(function (child) {
-
-    });
-    camera.lookAt(new THREE.Vector3(sphere.position.x, sphere.position.y , sphere.position.z));
-
-
-    if(keyboard.pressed("A")) {
-        sphere.translateX(0.05);
-    } else if(keyboard.pressed("D")) {
-        sphere.translateX(-0.05);
+    if(keyboard.pressed("D")) {
+        sphere.translateX(0.1);
+        camera.translateX(0.1);
+    } else if(keyboard.pressed("A")) {
+        sphere.translateX(-0.1);
+        camera.translateX(-0.1);
     } else if(keyboard.pressed("W")) {
-        sphere.translateY(-0.05);
+        sphere.translateY(-0.1);
+        camera.translateZ(-0.1);
     } else if(keyboard.pressed("S")) {
-        sphere.translateY(0.05);
+        sphere.translateY(0.1);
+        camera.translateZ(0.1)
     }
+   // camera.position.set(sphere.position.x, sphere.position.y + 10, sphere.position.z - 50);
+
+    //camera.lookAt(new THREE.Vector3(sphere.position.x, sphere.position.y, sphere.position.z));
 
     requestAnimationFrame(function () {
         update(renderer, scene, camera);
