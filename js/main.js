@@ -30,8 +30,8 @@ const camera = new THREE.PerspectiveCamera(45, window.innerWidth/ window.innerHe
  * Dimensions of the Floor.
  * @type {number}
  */
-const floorWidth = 100;
-const floorDepth = 100;
+const floorWidth = 1000;
+const floorDepth = 1000;
 /**
  * Lighting options.
  */
@@ -48,6 +48,7 @@ const gui = new dat.GUI();
 const keyboard = new THREEx.KeyboardState();
 const monitor = new createMonitor();
 const monitor2 = new createMonitor();
+const monitor3 = new createMonitor();
 
 /**
  * Code Block responsible for switching to the 3D-World.
@@ -76,8 +77,10 @@ function main() {
     scene.add(pointLight);
     scene.add(monitor);
     scene.add(monitor2);
+    scene.add(monitor3);
     monitor.position.z = -1;
     monitor.position.x = 30;
+    monitor3.position.x = -30;
     renderer.shadowMap.enabled = true;
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setClearColor('rgb(255,255,255)');
