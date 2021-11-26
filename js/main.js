@@ -35,7 +35,7 @@ const floorDepth = 100;
 /**
  * Lighting options.
  */
-const pointLight = generatePointLight(0xffffff, 2);
+const pointLight = generatePointLight(0xffffff, 1);
 const ambientLight = generateAmbientLighting(0xffffff, 1);
 /**
  * scene has in this case only one floor.
@@ -47,6 +47,7 @@ const gui = new dat.GUI();
 //const controls = new THREE.OrbitControls(camera, renderer.domElement);
 const keyboard = new THREEx.KeyboardState();
 const monitor = new createMonitor();
+const monitor2 = new createMonitor();
 
 /**
  * Code Block responsible for switching to the 3D-World.
@@ -61,8 +62,7 @@ document.getElementById("start").addEventListener("click", function () {
  * Main function. Builds first Scene with three.js
  */
 function main() {
-    camera.lookAt(0,0,0);
-    camera.position.set(0,10,30);
+    camera.position.set(0,10,40);
     floor.name = "floor";
     floor.rotation.x = Math.PI / 2;
     sphere.position.z = -2;
@@ -75,8 +75,9 @@ function main() {
     scene.add(ambientLight);
     scene.add(pointLight);
     scene.add(monitor);
+    scene.add(monitor2);
     monitor.position.z = -1;
-
+    monitor.position.x = 30;
     renderer.shadowMap.enabled = true;
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setClearColor('rgb(255,255,255)');
@@ -135,6 +136,7 @@ function createMonitor() {
     monitor.add(screenBackGround);
     monitor.add(screen);
 
+    monitor.castShadow = true;
 
     return monitor;
 }
@@ -160,6 +162,8 @@ function update(renderer, scene, camera) {
         sphere.translateY(0.1);
         camera.translateZ(0.1)
     }
+    pointLight.position.x = sphere.position.x;
+    pointLight.position.z = sphere.position.y;
    // camera.position.set(sphere.position.x, sphere.position.y + 10, sphere.position.z - 50);
 
     //camera.lookAt(new THREE.Vector3(sphere.position.x, sphere.position.y, sphere.position.z));
