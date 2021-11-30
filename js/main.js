@@ -1,9 +1,13 @@
 import {Monitor} from "./objects/monitor.js";
 /**
  * The Renderer of the Scene.
- * @type {WebGLRenderer}
+ * @type {HTMLElement}
  */
 
+const keyUp = document.getElementById("topControl");
+const keyDown = document.getElementById("bottomControl");
+const keyLeft=document.getElementById("leftControl");
+const keyRight = document.getElementById("rightControl");
 
 const renderer = new THREE.WebGLRenderer();
 /**
@@ -44,6 +48,8 @@ document.getElementById("start").addEventListener("click", function () {
     main();
     document.getElementById("startDiv").style = "display:none;";
     document.getElementById("webgl").style = "display:block;"
+    document.getElementById("keyBoardControls").style = "display:grid;"
+
 })
 
 /**
@@ -94,7 +100,6 @@ function generateFloor(w, d) {
     return mesh;
 }
 
-
 function generateSphere(radius, widthSegments, heightSegments) {
     let geometry = new THREE.SphereGeometry(radius, widthSegments, heightSegments);
     let material = new THREE.MeshPhongMaterial( {
@@ -118,24 +123,78 @@ function update(renderer, scene, camera) {
     if(keyboard.pressed("D")) {
         sphere.translateX(step);
         camera.translateX(step);
+        let img = keyRight.children[0];
+        img.setAttribute("src", "img/tastaturKeysWeißRight.jpg");
     } else if(keyboard.pressed("A")) {
         sphere.translateX(-step);
         camera.translateX(-step);
+        let img = keyLeft.children[0];
+        img.setAttribute("src", "img/tastaturKeysWeißLeft.jpg");
     } else if(keyboard.pressed("W")) {
         sphere.translateY(-step);
         camera.translateZ(-step);
+        let img = keyUp.children[0];
+        img.setAttribute("src", "img/tastaturKeysWeißUp.jpg");
     } else if(keyboard.pressed("S")) {
         sphere.translateY(step);
         camera.translateZ(step);
+        let img = keyDown.children[0];
+        img.setAttribute("src", "img/tastaturKeysWeißDown.jpg");
     }
-    pointLight.position.x = sphere.position.x;
-    pointLight.position.z = sphere.position.y;
-
-
-    requestAnimationFrame(function () {
-        update(renderer, scene, camera);
+    if(!keyboard.pressed("D")) {
+        let img = keyRight.children[0];
+        img.setAttribute("src", "img/tastaturKeysSchwarzRight.jpg");
+    }
+    if(!keyboard.pressed("A")) {
+        let img = keyLeft.children[0];
+        img.setAttribute("src", "img/tastaturKeysSchwarzLeft.jpg");
+    }
+    if (!keyboard.pressed("W")) {
+        let img = keyUp.children[0];
+        img.setAttribute("src", "img/tastaturKeysSchwarzUp.jpg");
+    }
+    if (!keyboard.pressed("S")) {
+                let img = keyDown.children[0];
+                img.setAttribute("src", "img/tastaturKeysSchwarzDown.jpg");
+            }
+            //TODO: Code above is really bullshit
+            pointLight.position.x = sphere.position.x;
+            pointLight.position.z = sphere.position.y;
+            requestAnimationFrame(function () {
+                    update(renderer, scene, camera);
+                }
+            );
         }
-    );
-}
+
+        const webgl = document.getElementById("webgl");
+        webgl.addEventListener("mouseover", function (event) {
+            keyUp.children[0].setAttribute("src", "img/tastaturKeysSchwarzUp.jpg");
+            keyDown.children[0].setAttribute("src", "img/tastaturKeysSchwarzDown.jpg");
+            keyLeft.children[0].setAttribute("src", "img/tastaturKeysSchwarzLeft.jpg");
+            keyRight.children[0].setAttribute("src", "img/tastaturKeysSchwarzRight.jpg");
+
+        })
+
+
+        keyUp.addEventListener("mouseover", function (event) {
+            let img = keyUp.children[0];
+            img.setAttribute("src", "img/tastaturKeysWeißUp.jpg");
+        });
+        keyDown.addEventListener("mouseover", function (event) {
+            let img = keyDown.children[0];
+            img.setAttribute("src", "img/tastaturKeysWeißDown.jpg");
+        });
+
+        keyLeft.addEventListener("mouseover", function (event) {
+            let img = keyLeft.children[0];
+            img.setAttribute("src", "img/tastaturKeysWeißLeft.jpg");
+        });
+
+        keyRight.addEventListener("mouseover", function (event) {
+            let img = keyRight.children[0];
+            img.setAttribute("src", "img/tastaturKeysWeißRight.jpg");
+        })
+
+
 
 

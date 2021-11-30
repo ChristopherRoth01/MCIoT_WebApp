@@ -10,19 +10,21 @@
     <link rel="stylesheet" type="text/css" href="/css/main.css">
 </head>
 <body>
+
     <div id="startDiv" class="container full-height center">
         <h1 id="entry-heading">Herzlich Willkommen zu dieser interaktiven Tour durch alle neuen HTML5 Features!</h1>
         <button class="btn btn-primary" id="start">Start</button>
     </div>
-    <div id="webgl" style="display: none"></div>
-    <div id="keyBoardControls" class="col-lg-2">
-        <div>
-            <div id="leftControl"><img src="img/"></div>
-            <div id="topControl"></div>
-            <div id="bottomControl"></div>
-            <div id="rightControl"></div>
+        <div id="webgl" style="display: none"></div>
+        <div id="keyBoardControls" style="display:none;" class="col-lg-4">
+
+                <div id="leftControl" class="keycontrols"><img src="img/tastaturKeysSchwarzLeft.jpg" alt=""></div>
+                <div id="topControl" class="keycontrols"><img src="img/tastaturKeysSchwarzUp.jpg" alt=""></div>
+                <div id="bottomControl" class="keycontrols"><img src="img/tastaturKeysSchwarzDown.jpg" alt=""></div>
+                <div id="rightControl" class="keycontrols"><img src="img/tastaturKeysSchwarzRight.jpg" alt=""></div>
+
         </div>
-    </div>
+
     <script src="/lib/three/build/three.js"></script>
     <script type="module" src="/lib/three/build/three.module.js"></script>
     <script src="/js/controls/OrbitControls.js"></script>
