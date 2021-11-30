@@ -13,7 +13,7 @@ const materialWhite = new THREE.MeshPhongMaterial({
 
 
 
-class Monitor extends THREE.Mesh {
+export class Monitor extends THREE.Mesh {
 
     constructor() {
         super();
@@ -43,5 +43,11 @@ class Monitor extends THREE.Mesh {
 
     getMesh() {
         return this.monitor;
+    }
+
+    setPosition(x,y,z) {
+        this.monitor.position.x = x;
+        this.monitor.position.y = y;
+        this.monitor.position.z = z;
     }
 }

@@ -1,9 +1,10 @@
-
-
+import {Monitor} from "./objects/monitor.js";
 /**
  * The Renderer of the Scene.
  * @type {WebGLRenderer}
  */
+
+
 const renderer = new THREE.WebGLRenderer();
 /**
  * The scene, which gets rendered by the @renderer.
@@ -11,6 +12,7 @@ const renderer = new THREE.WebGLRenderer();
  */
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(45, window.innerWidth/ window.innerHeight, 1, 1000);
+const clock = new THREE.Clock();
 /**
  * Dimensions of the Floor.
  * @type {number}
@@ -20,8 +22,8 @@ const floorDepth = 100;
 /**
  * Lighting options.
  */
-const pointLight = generatePointLight(0xffffff, 1);
-const ambientLight = generateAmbientLighting(0xffffff, 1);
+const ambientLight = new THREE.AmbientLight(0xffffff, 1);
+const pointLight = new THREE.PointLight(0xffffff, 1);
 /**
  * scene has in this case only one floor.
  * @type {Mesh}
@@ -53,19 +55,20 @@ function main() {
     floor.rotation.x = Math.PI / 2;
     sphere.position.z = -2;
     floor.add(sphere);
-    ambientLight.positionY = 10;
+    ambientLight.position.y = 10;
     pointLight.position.y = 10;
     gui.add(ambientLight, 'intensity', 0.02);
     gui.add(pointLight, 'intensity', 0.02);
     scene.add(floor);
-    scene.add(ambientLight);
+
     scene.add(pointLight);
+    scene.add(ambientLight);
     scene.add(monitor.getMesh());
     scene.add(monitor2.getMesh());
     scene.add(monitor3.getMesh());
 
-    monitor.position.x = 30;
-    monitor3.position.x = -30;
+    monitor.setPosition(30,0,0);
+    monitor3.setPosition(-30,0,0);
     renderer.shadowMap.enabled = true;
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setClearColor('rgb(255,255,255)');
@@ -101,11 +104,6 @@ function generateSphere(radius, widthSegments, heightSegments) {
     return sphere;
 }
 
-
-function createMonitor() {
-
-
-}
 /**
  * Updates the scenery all the time.
  * @param renderer
@@ -114,19 +112,21 @@ function createMonitor() {
  * @param controls
  */
 function update(renderer, scene, camera) {
+    let speed = 10;
     renderer.render(scene, camera);
+    let step = speed*clock.getDelta();
     if(keyboard.pressed("D")) {
-        sphere.translateX(0.1);
-        camera.translateX(0.1);
+        sphere.translateX(step);
+        camera.translateX(step);
     } else if(keyboard.pressed("A")) {
-        sphere.translateX(-0.1);
-        camera.translateX(-0.1);
+        sphere.translateX(-step);
+        camera.translateX(-step);
     } else if(keyboard.pressed("W")) {
-        sphere.translateY(-0.1);
-        camera.translateZ(-0.1);
+        sphere.translateY(-step);
+        camera.translateZ(-step);
     } else if(keyboard.pressed("S")) {
-        sphere.translateY(0.1);
-        camera.translateZ(0.1);
+        sphere.translateY(step);
+        camera.translateZ(step);
     }
     pointLight.position.x = sphere.position.x;
     pointLight.position.z = sphere.position.y;

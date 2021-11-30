@@ -1,4 +1,4 @@
-class Box extends THREE.Mesh {
+export class Box extends THREE.Mesh {
     constructor(w, h, d) {
         super();
         let geo = new THREE.BoxGeometry(w, h, d);
@@ -9,7 +9,7 @@ class Box extends THREE.Mesh {
         mesh.castShadow = true;
     }
 
-    place(x, y, z) {
+    setPosition(x, y, z) {
         this.position.x = x;
         this.position.y = y;
         this.position.z = z;
