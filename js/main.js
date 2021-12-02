@@ -59,7 +59,7 @@ document.getElementById("start").addEventListener("click", function () {
  * Main function. Builds first Scene with three.js
  */
 function main() {
-    camera.position.set(0,30,40);
+    camera.position.set(0,40,40);
     camera.rotation.x = -30/180*Math.PI;
     camera.rotation.y =30/180*Math.PI;
     camera.rotation.z = 15/180*Math.PI;
@@ -133,21 +133,26 @@ function update(renderer, scene, camera) {
     let step = speed*clock.getDelta();
     if(keyboard.pressed("D")) {
         sphere.translateX(step);
+        camera.position.x +=-0.117*step;
+        camera.position.z += 0.7583*step;
         camera.translateX(step);
         let img = keyRight.children[0];
         img.setAttribute("src", "img/tastaturKeysWeißRight.jpg");
     } else if(keyboard.pressed("A")) {
         sphere.translateX(-step);
-        camera.translateX(-step);
+        camera.position.x += 0.883*step;
+        camera.position.z += -0.25*step;
         let img = keyLeft.children[0];
         img.setAttribute("src", "img/tastaturKeysWeißLeft.jpg");
     } else if(keyboard.pressed("W")) {
         sphere.translateY(-step);
-        camera.translateZ(-step);
+        camera.translateX(-step*0.1);
+        camera.translateZ(step*0.752);
         let img = keyUp.children[0];
         img.setAttribute("src", "img/tastaturKeysWeißUp.jpg");
     } else if(keyboard.pressed("S")) {
         sphere.translateY(step);
+        camera.translateX(0.988);
         camera.translateZ(step);
         let img = keyDown.children[0];
         img.setAttribute("src", "img/tastaturKeysWeißDown.jpg");
