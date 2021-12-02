@@ -22,8 +22,8 @@ const clock = new THREE.Clock();
  * Dimensions of the Floor.
  * @type {number}
  */
-const floorWidth = 100;
-const floorDepth = 100;
+const floorWidth = 500;
+const floorDepth = 500;
 /**
  * Lighting options.
  */
@@ -133,26 +133,22 @@ function update(renderer, scene, camera) {
     let step = speed*clock.getDelta();
     if(keyboard.pressed("D")) {
         sphere.translateX(step);
-        camera.position.z += 0.6583*step;
-        camera.translateX(step);
+        camera.position.x += step;
         let img = keyRight.children[0];
         img.setAttribute("src", "img/tastaturKeysWeißRight.jpg");
     } else if(keyboard.pressed("A")) {
         sphere.translateX(-step);
-        camera.position.x -= 0.883*step;
-        camera.position.z += 0*step;
+        camera.position.x -= step;
         let img = keyLeft.children[0];
         img.setAttribute("src", "img/tastaturKeysWeißLeft.jpg");
     } else if(keyboard.pressed("W")) {
         sphere.translateY(-step);
-        camera.position.x -=step*0.1;
-        camera.position.z -= step*0.752;
+        camera.position.z -= step;
         let img = keyUp.children[0];
         img.setAttribute("src", "img/tastaturKeysWeißUp.jpg");
     } else if(keyboard.pressed("S")) {
         sphere.translateY(step);
-        camera.position.z += 0.988*step;
-        camera.position.x += 0.02238*step;
+        camera.position.z += step;
         let img = keyDown.children[0];
         img.setAttribute("src", "img/tastaturKeysWeißDown.jpg");
     }
