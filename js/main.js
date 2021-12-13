@@ -39,15 +39,20 @@ const objMove = new ObjectMovement(camera, sphere, defaultStep);
 
 //const controls = new THREE.OrbitControls(camera, renderer.domElement);
 const keyboard = new THREEx.KeyboardState();
-const texture = loader.load('img/textures/canvasTexture.jpg');
-const monitor = new Monitor(texture,2);
-const monitor2 = new Monitor(texture,2);
-const monitor3 = new Monitor(texture,2);
+const canvasTexture = loader.load('img/textures/canvasTexture.jpg');
+const asideTexture = loader.load('img/textures/asideTagTexture.jpg');
+const headerTexture = loader.load('img/textures/headerTagTexture.jpg');
+const footerTexture = loader.load('img/textures/footerTagTexture.jpg');
 
-console.log(texture);
+const monitorCanvas = new Monitor(canvasTexture,2);
+const monitorAside = new Monitor(asideTexture,2);
+const monitorHeader = new Monitor(headerTexture,2);
+const monitorFooter = new Monitor(footerTexture,2);
+
 const keyboardBox1 = new Keyboard(1);
 const keyboardBox2 = new Keyboard(1);
 const keyboardBox3 = new Keyboard(1);
+const keyboardBox4 = new Keyboard(1);
 /**
  * Code Block responsible for switching to the 3D-World.
  */
@@ -80,17 +85,22 @@ function main() {
     scene.add(keyboardBox1.getMesh());
     scene.add(keyboardBox2.getMesh());
     scene.add(keyboardBox3.getMesh());
-
+    scene.add(keyboardBox4.getMesh());
     scene.add(pointLight);
     scene.add(ambientLight);
-    scene.add(monitor.getMesh());
-    scene.add(monitor2.getMesh());
-    scene.add(monitor3.getMesh());
+    scene.add(monitorCanvas.getMesh());
+    scene.add(monitorAside.getMesh());
+    scene.add(monitorFooter.getMesh());
+    scene.add(monitorHeader.getMesh());
+
     keyboardBox1.setPosition(-5, 0,15);
     keyboardBox2.setPosition(25, 0,15)
     keyboardBox3.setPosition(-35, 0,15)
-    monitor.setPosition(30,0,0);
-    monitor3.setPosition(-30,0,0);
+    keyboardBox4.setPosition(-65, 0,15)
+
+    monitorCanvas.setPosition(30,0,0);
+    monitorFooter.setPosition(-30,0,0);
+    monitorHeader.setPosition(-60,0,0);
     renderer.shadowMap.enabled = true;
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setClearColor('rgb(255,255,255)');

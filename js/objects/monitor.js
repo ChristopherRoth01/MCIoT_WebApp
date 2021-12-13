@@ -37,7 +37,6 @@ export class Monitor extends THREE.Mesh {
         this.monitor.add(monitorStand);
         this.monitor.add(screenBackGround);
         this.monitor.add(screen);
-
         this.monitor.castShadow = true;
 
     }
