@@ -3,34 +3,35 @@ const monitorStandGeometry = new THREE.BoxGeometry(1*2,5*2,1*2);
 const screenBackGroundGeometry = new THREE.BoxGeometry(10*2,5*2,1*2);
 const screenGeometry = new THREE.BoxGeometry(9.5*2,4.5*2,1*2);
 
-const materialBlack = new THREE.MeshPhongMaterial({
-    color: 0x000000,
-});
-
-const materialWhite = new THREE.MeshPhongMaterial({
-    color: 0xffffff,
-});
-
-
+const materialBlack = new THREE.MeshPhongMaterial({color: 0x000000});
+const materialWhite = new THREE.MeshPhongMaterial({color: 0xffffff});
 
 export class Monitor extends THREE.Mesh {
 
-    constructor() {
+    /**
+     * Constructs a monitor. Positions all Parts required for the monitor relative to each other.
+     * A monitor consists of a monitorStand, a screenBackGround and the screen itself.
+     *
+     * @param texture the image/texture which should be displayed on the screen. Should be in 16:9 aspect ratio.
+     * @param scale the scale/size of the monitor.
+     */
+    constructor(texture, scale) {
         super();
+        const materialScreen = new THREE.MeshPhongMaterial({map:texture})
         const monitorStand = new THREE.Mesh(monitorStandGeometry, materialBlack);
         const screenBackGround = new THREE.Mesh(screenBackGroundGeometry, materialBlack);
-        const screen = new THREE.Mesh(screenGeometry, materialWhite);
-        monitorStand.position.x = -1.5*2;
-        monitorStand.position.y = 2.5*2;
-        monitorStand.position.z = 1.5*2;
+        const screen = new THREE.Mesh(screenGeometry, materialScreen);
+        monitorStand.position.x = -1.5*scale;
+        monitorStand.position.y = 2.5*scale;
+        monitorStand.position.z = 1.5*scale;
 
-        screenBackGround.position.x = -1.5*2;
-        screenBackGround.position.y = 6*2;
-        screenBackGround.position.z = 2 *2;
+        screenBackGround.position.x = -1.5*scale;
+        screenBackGround.position.y = 6*scale;
+        screenBackGround.position.z = 2 *scale;
 
-        screen.position.x = -1.5*2;
-        screen.position.y = 6*2;
-        screen.position.z = 2.01*2;
+        screen.position.x = -1.5*scale;
+        screen.position.y = 6*scale;
+        screen.position.z = 2.10*scale;
 
         this.monitor = new THREE.Group();
         this.monitor.add(monitorStand);

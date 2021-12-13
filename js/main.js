@@ -1,15 +1,13 @@
 import {Monitor} from "./objects/monitor.js";
 import {Keyboard} from "./objects/keyboard.js";
-/**
- * The Renderer of the Scene.
- * @type {HTMLElement}
- */
+import {ObjectMovement} from "./controls/ObjectMovement.js";
 
+
+const loader = new THREE.TextureLoader();
 const keyUp = document.getElementById("topControl");
 const keyDown = document.getElementById("bottomControl");
 const keyLeft=document.getElementById("leftControl");
 const keyRight = document.getElementById("rightControl");
-
 const renderer = new THREE.WebGLRenderer();
 /**
  * The scene, which gets rendered by the @renderer.
@@ -34,13 +32,19 @@ const pointLight = new THREE.PointLight(0xffffff, 1);
  * @type {Mesh}
  */
 const floor = generateFloor(floorWidth, floorDepth);
-const sphere = generateSphere( 2, 60, 60);
+const sphere = generateSphere( 2, 200, 200);
 const gui = new dat.GUI();
+const defaultStep = 0.3;
+const objMove = new ObjectMovement(camera, sphere, defaultStep);
+
 //const controls = new THREE.OrbitControls(camera, renderer.domElement);
 const keyboard = new THREEx.KeyboardState();
-const monitor = new Monitor();
-const monitor2 = new Monitor();
-const monitor3 = new Monitor();
+const texture = loader.load('img/textures/canvasTexture.jpg');
+const monitor = new Monitor(texture,2);
+const monitor2 = new Monitor(texture,2);
+const monitor3 = new Monitor(texture,2);
+
+console.log(texture);
 const keyboardBox1 = new Keyboard(1);
 const keyboardBox2 = new Keyboard(1);
 const keyboardBox3 = new Keyboard(1);
@@ -71,6 +75,7 @@ function main() {
     pointLight.position.y = 10;
     gui.add(ambientLight, 'intensity', 0.02);
     gui.add(pointLight, 'intensity', 0.02);
+    gui.add(objMove, 'step', defaultStep);
     scene.add(floor);
     scene.add(keyboardBox1.getMesh());
     scene.add(keyboardBox2.getMesh());
@@ -115,66 +120,28 @@ function generateSphere(radius, widthSegments, heightSegments) {
     let geometry = new THREE.SphereGeometry(radius, widthSegments, heightSegments);
     let material = new THREE.MeshPhongMaterial( {
         color: 0x000088,
+        shininess: 100,
     } );
-    let sphere = new THREE.Mesh( geometry, material );
-    return sphere;
+    return new THREE.Mesh(geometry, material);
 }
-
 /**
  * Updates the scenery all the time.
  * @param renderer
  * @param scene
  * @param camera
- * @param controls
  */
 function update(renderer, scene, camera) {
     let speed = 10;
     renderer.render(scene, camera);
     let step = speed*clock.getDelta();
-    if(keyboard.pressed("D")) {
-        sphere.translateX(step);
-        camera.position.x += step;
-        let img = keyRight.children[0];
-        img.setAttribute("src", "img/tastaturKeysWeißRight.jpg");
-    } else if(keyboard.pressed("A")) {
-        sphere.translateX(-step);
-        camera.position.x -= step;
-        let img = keyLeft.children[0];
-        img.setAttribute("src", "img/tastaturKeysWeißLeft.jpg");
-    } else if(keyboard.pressed("W")) {
-        sphere.translateY(-step);
-        camera.position.z -= step;
-        let img = keyUp.children[0];
-        img.setAttribute("src", "img/tastaturKeysWeißUp.jpg");
-    } else if(keyboard.pressed("S")) {
-        sphere.translateY(step);
-        camera.position.z += step;
-        let img = keyDown.children[0];
-        img.setAttribute("src", "img/tastaturKeysWeißDown.jpg");
-    }
-    if(!keyboard.pressed("D")) {
-        let img = keyRight.children[0];
-        img.setAttribute("src", "img/tastaturKeysSchwarzRight.jpg");
-    }
-    if(!keyboard.pressed("A")) {
-        let img = keyLeft.children[0];
-        img.setAttribute("src", "img/tastaturKeysSchwarzLeft.jpg");
-    }
-    if (!keyboard.pressed("W")) {
-        let img = keyUp.children[0];
-        img.setAttribute("src", "img/tastaturKeysSchwarzUp.jpg");
-    }
-    if (!keyboard.pressed("S")) {
-        let img = keyDown.children[0];
-        img.setAttribute("src", "img/tastaturKeysSchwarzDown.jpg");
-    }
-    //TODO: Code above is really bullshit
+    objMove.moveKeyboardInput(step);
     pointLight.position.x = sphere.position.x;
     pointLight.position.z = sphere.position.y;
     requestAnimationFrame(function () {
             update(renderer, scene, camera);
         }
     );
+
 }
 
 
