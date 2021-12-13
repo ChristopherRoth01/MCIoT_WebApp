@@ -1,8 +1,9 @@
 import {Monitor} from "./objects/monitor.js";
 import {Keyboard} from "./objects/keyboard.js";
 import {ObjectMovement} from "./controls/ObjectMovement.js";
+import {GLTFLoader} from "../lib/three/examples/jsm/loaders/GLTFLoader.js";
 
-
+const gltfLoader = new GLTFLoader();
 const loader = new THREE.TextureLoader();
 const keyUp = document.getElementById("topControl");
 const keyDown = document.getElementById("bottomControl");
@@ -92,7 +93,13 @@ function main() {
     scene.add(monitorAside.getMesh());
     scene.add(monitorFooter.getMesh());
     scene.add(monitorHeader.getMesh());
+    loader.load('3dObjects/free_car_001.gltf', function (gltf) {
+        scene.add(gltf.scene);
+        console.log("flat!");
+    }, undefined, function (error) {
+        console.error(error);
 
+    } );
     keyboardBox1.setPosition(-5, 0,15);
     keyboardBox2.setPosition(25, 0,15)
     keyboardBox3.setPosition(-35, 0,15)
