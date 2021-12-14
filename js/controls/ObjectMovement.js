@@ -24,22 +24,26 @@ export class ObjectMovement {
 
     moveKeyboardInput() {
         if (keyboard.pressed("D")) {
-            this.sphere.translateX(this.step);
+            this.sphere.position.x += this.step;
+            this.sphere.rotation.y = 90/180*Math.PI;
             this.camera.position.x += this.step;
             let img = keyRight.children[0];
             img.setAttribute("src", "img/keyBoard/tastaturKeysWeißRight.jpg");
         } else if (keyboard.pressed("A")) {
-            this.sphere.translateX(-this.step);
+            this.sphere.position.x -= this.step;
+            this.sphere.rotation.y = -90/180*Math.PI;
             this.camera.position.x -= this.step;
             let img = keyLeft.children[0];
             img.setAttribute("src", "img/keyBoard/tastaturKeysWeißLeft.jpg");
         } else if (keyboard.pressed("W")) {
-            this.sphere.translateY(-this.step);
+            this.sphere.position.z -=this.step;
+            this.sphere.rotation.y = Math.PI;
             this.camera.position.z -= this.step;
             let img = keyUp.children[0];
             img.setAttribute("src", "img/keyBoard/tastaturKeysWeißUp.jpg");
         } else if (keyboard.pressed("S")) {
-            this.sphere.translateY(this.step);
+            this.sphere.position.z += this.step;
+            this.sphere.rotation.y = 0;
             this.camera.position.z += this.step;
             let img = keyDown.children[0];
             img.setAttribute("src", "img/keyBoard/tastaturKeysWeißDown.jpg");

@@ -1,10 +1,4 @@
 
-const monitorStandGeometry = new THREE.BoxGeometry(1*2,5*2,1*2);
-const screenBackGroundGeometry = new THREE.BoxGeometry(10*2,5*2,1*2);
-const screenGeometry = new THREE.BoxGeometry(9.5*2,4.5*2,1*2);
-
-const materialBlack = new THREE.MeshPhongMaterial({color: 0x000000});
-const materialWhite = new THREE.MeshPhongMaterial({color: 0xffffff});
 
 export class Monitor extends THREE.Mesh {
 
@@ -17,10 +11,18 @@ export class Monitor extends THREE.Mesh {
      */
     constructor(texture, scale) {
         super();
+        const monitorStandGeometry = new THREE.BoxGeometry(1*scale,5*scale,1*scale);
+        const screenBackGroundGeometry = new THREE.BoxGeometry(10*scale,5*scale,1*scale);
+        const screenGeometry = new THREE.BoxGeometry(9.5*scale,4.5*scale,1*scale);
+
+        const materialBlack = new THREE.MeshPhongMaterial({color: 0x000000});
+        const materialWhite = new THREE.MeshPhongMaterial({color: 0xffffff});
+
         const materialScreen = new THREE.MeshPhongMaterial({map:texture})
         const monitorStand = new THREE.Mesh(monitorStandGeometry, materialBlack);
         const screenBackGround = new THREE.Mesh(screenBackGroundGeometry, materialBlack);
         const screen = new THREE.Mesh(screenGeometry, materialScreen);
+
         monitorStand.position.x = -1.5*scale;
         monitorStand.position.y = 2.5*scale;
         monitorStand.position.z = 1.5*scale;

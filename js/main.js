@@ -1,15 +1,11 @@
-import {Monitor} from "./objects/monitor.js";
-import {Keyboard} from "./objects/keyboard.js";
+
 import {ObjectMovement} from "./controls/ObjectMovement.js";
 import {GLTFLoader} from "../lib/three/examples/jsm/loaders/GLTFLoader.js";
+import {Computer} from "./objects/computer.js";
 
 const gltfLoader = new GLTFLoader();
 const loader = new THREE.TextureLoader();
-const keyUp = document.getElementById("topControl");
-const keyDown = document.getElementById("bottomControl");
-const keyLeft=document.getElementById("leftControl");
-const keyRight = document.getElementById("rightControl");
-const renderer = new THREE.WebGLRenderer();
+const renderer = new THREE.WebGLRenderer({ antialias: true });
 /**
  * The scene, which gets rendered by the @renderer.
  * @type {Scene}
@@ -33,10 +29,9 @@ const pointLight = new THREE.PointLight(0xffffff, 1);
  * @type {Mesh}
  */
 const floor = generateFloor(floorWidth, floorDepth);
-const sphere = generateSphere( 2, 200, 200);
 const gui = new dat.GUI();
 const defaultStep = 0.3;
-const objMove = new ObjectMovement(camera, sphere, defaultStep);
+let objMove = new ObjectMovement(null, null, null) ;
 
 //const controls = new THREE.OrbitControls(camera, renderer.domElement);
 const keyboard = new THREEx.KeyboardState();
@@ -45,75 +40,67 @@ const asideTexture = loader.load('img/textures/asideTagTexture.jpg');
 const headerTexture = loader.load('img/textures/headerTagTexture.jpg');
 const footerTexture = loader.load('img/textures/footerTagTexture.jpg');
 
-const monitorCanvas = new Monitor(canvasTexture,2);
-const monitorAside = new Monitor(asideTexture,2);
-const monitorHeader = new Monitor(headerTexture,2);
-const monitorFooter = new Monitor(footerTexture,2);
-
-const keyboardBox1 = new Keyboard(1);
-const keyboardBox2 = new Keyboard(1);
-const keyboardBox3 = new Keyboard(1);
-const keyboardBox4 = new Keyboard(1);
+const computerCanvas = new Computer(canvasTexture,2);
+const computerAside = new Computer(asideTexture,2);
+const computerHeader = new Computer(headerTexture,2);
+const computerFooter = new Computer(footerTexture,2);
 /**
  * Code Block responsible for switching to the 3D-World.
  */
 document.getElementById("start").addEventListener("click", function () {
-    main();
+    main().then(r => update(renderer, scene, camera));
     document.getElementById("startDiv").style = "display:none;";
     document.getElementById("webgl").style = "display:block;"
     document.getElementById("keyBoardControls").style = "display:grid;"
-
 })
+let car;
+let count = 1;
+function loadStuff() {
+    gltfLoader.load('/3dObjects/free_car_001_size3.glb', function (gltf) {
+        if(count === 1) {
+        car = gltf.scene;
+        scene.add(car);
+        objMove = new ObjectMovement(camera, car, defaultStep);
+        gui.add(objMove, 'step', defaultStep);
+        console.log(Date.now());
+        count++;
+        }
+    }, undefined, function (error) {
+        console.error(error);
+    } );
+}
 
 /**
  * Main function. Builds first Scene with three.js
  */
-function main() {
+async function main() {
     camera.position.set(60,40,80);
     camera.rotation.x = -30/180*Math.PI;
     camera.rotation.y =30/180*Math.PI;
     camera.rotation.z = 15/180*Math.PI;
     floor.name = "floor";
     floor.rotation.x = Math.PI / 2;
-    sphere.position.z = -2;
-    floor.add(sphere);
     ambientLight.position.y = 10;
     pointLight.position.y = 10;
     gui.add(ambientLight, 'intensity', 0.02);
     gui.add(pointLight, 'intensity', 0.02);
-    gui.add(objMove, 'step', defaultStep);
+
     scene.add(floor);
-    scene.add(keyboardBox1.getMesh());
-    scene.add(keyboardBox2.getMesh());
-    scene.add(keyboardBox3.getMesh());
-    scene.add(keyboardBox4.getMesh());
     scene.add(pointLight);
     scene.add(ambientLight);
-    scene.add(monitorCanvas.getMesh());
-    scene.add(monitorAside.getMesh());
-    scene.add(monitorFooter.getMesh());
-    scene.add(monitorHeader.getMesh());
-    loader.load('3dObjects/free_car_001.gltf', function (gltf) {
-        scene.add(gltf.scene);
-        console.log("flat!");
-    }, undefined, function (error) {
-        console.error(error);
-
-    } );
-    keyboardBox1.setPosition(-5, 0,15);
-    keyboardBox2.setPosition(25, 0,15)
-    keyboardBox3.setPosition(-35, 0,15)
-    keyboardBox4.setPosition(-65, 0,15)
-
-    monitorCanvas.setPosition(30,0,0);
-    monitorFooter.setPosition(-30,0,0);
-    monitorHeader.setPosition(-60,0,0);
+    scene.add(computerCanvas.getMesh());
+    scene.add(computerAside.getMesh());
+    scene.add(computerFooter.getMesh());
+    scene.add(computerHeader.getMesh());
+    loadStuff();
+    await loadStuff();
+    computerCanvas.setPosition(30,0,0);
+    computerFooter.setPosition(-30,0,0);
+    computerHeader.setPosition(-60,0,0);
     renderer.shadowMap.enabled = true;
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setClearColor('rgb(255,255,255)');
     document.getElementById("webgl").appendChild(renderer.domElement);
-
-    update(renderer, scene, camera);
     return scene;
 }
 
@@ -133,14 +120,6 @@ function generateFloor(w, d) {
     return mesh;
 }
 
-function generateSphere(radius, widthSegments, heightSegments) {
-    let geometry = new THREE.SphereGeometry(radius, widthSegments, heightSegments);
-    let material = new THREE.MeshPhongMaterial( {
-        color: 0x000088,
-        shininess: 100,
-    } );
-    return new THREE.Mesh(geometry, material);
-}
 /**
  * Updates the scenery all the time.
  * @param renderer
@@ -152,8 +131,6 @@ function update(renderer, scene, camera) {
     renderer.render(scene, camera);
     let step = speed*clock.getDelta();
     objMove.moveKeyboardInput(step);
-    pointLight.position.x = sphere.position.x;
-    pointLight.position.z = sphere.position.y;
     requestAnimationFrame(function () {
             update(renderer, scene, camera);
         }
