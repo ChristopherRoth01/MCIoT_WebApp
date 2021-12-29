@@ -1,6 +1,6 @@
 
 import {ObjectMovement} from "./controls/ObjectMovement.js";
-import {GLTFLoader} from "../../lib/three/examples/jsm/loaders/GLTFLoader.js";
+import {GLTFLoader} from "../lib/three/examples/jsm/loaders/GLTFLoader.js";
 import {Computer} from "./objects/computer.js";
 
 const gltfLoader = new GLTFLoader();
