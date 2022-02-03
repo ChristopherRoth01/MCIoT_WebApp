@@ -22,15 +22,14 @@ export class ObjectMovement {
     }
 
     moveKeyboardInput() {
-
         if (keyboard.pressed("D")) {
             this.sphere.position.x += this.step;
-            this.sphere.rotation.y = 90/180*Math.PI;
+            this.sphere.rotation.y = 0.5*Math.PI;
             this.camera.position.x += this.step;
             keyRight.children[0].setAttribute("src", "img/keyBoard/tastaturKeysWeißRight.jpg");
         } else if (keyboard.pressed("A")) {
             this.sphere.position.x -= this.step;
-            this.sphere.rotation.y = -90/180*Math.PI;
+            this.sphere.rotation.y = -0.5*Math.PI;
             this.camera.position.x -= this.step;
             let img = keyLeft.children[0];
             img.setAttribute("src", "img/keyBoard/tastaturKeysWeißLeft.jpg");
@@ -49,39 +48,15 @@ export class ObjectMovement {
         }
     }
 
-    moveAcceleratorInput() {
-        navigator.permissions.query({ name: 'accelerometer' })
-            .then(result => {
-                if (result.state === 'denied') {
-                    console.log('Permission to use accelerometer sensor is denied.');
-                    return;
-                }
-                let accelerometer = null;
-                try {
-                    accelerometer = new Accelerometer({frequency: 60});
-                    accelerometer.addEventListener('error', event => {
-                        // Handle runtime errors.
-                        if (event.error.name === 'NotAllowedError') {
-                            // Branch to code for requesting permission.
-                        } else if (event.error.name === 'NotReadableError' ) {
-                            console.log('Cannot connect to the sensor.');
-                        }
-                    });
-                    accelerometer.addEventListener('reading', () => reloadOnShake(accelerometer));
-                    accelerometer.start();
-                    console.log(accelerometer);
-                } catch (error) {
-                    // Handle construction errors.
-                    if (error.name === 'SecurityError') {
-                        // See the note above about feature policy.
-                        console.log('Sensor construction was blocked by a feature policy.');
-                    } else if (error.name === 'ReferenceError') {
-                        console.log('Sensor is not supported by the User Agent.');
-                    } else {
-                        throw error;
-                    }
-                }
-            });
+    getPositionX() {
+        return this.sphere.position.x;
     }
+    getPositionY() {
+        return this.sphere.position.y;
+    }
+    getPositionZ() {
+        return this.sphere.position.z;
+    }
+
 
 }
