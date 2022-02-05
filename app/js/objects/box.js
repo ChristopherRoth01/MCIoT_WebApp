@@ -5,11 +5,11 @@ export class Box extends THREE.Mesh {
     constructor(w, h, d, color) {
         super();
         let geo = new THREE.BoxGeometry(w, h, d);
-        let material = new THREE.MeshPhongMaterial({
+        let material = new THREE.MeshBasicMaterial({
             color: color,
         });
         this.mesh = new THREE.Mesh(geo, material);
-        this.mesh.castShadow = true;
+        this.mesh.castShadow = false;
     }
 
     setPosition(x, y, z) {
