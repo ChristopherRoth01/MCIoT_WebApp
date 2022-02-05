@@ -6,6 +6,7 @@ import {LinkArea} from "./objects/linkarea.js";
 import {Lantern} from "./objects/lantern.js";
 import {Box} from "./objects/box.js";
 
+let locale = "de"; //englisch ist default wert.
 const gltfLoader = new GLTFLoader();
 const loader = new THREE.TextureLoader();
 const renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -77,13 +78,13 @@ const lantern5 = new Lantern(2, lanternIntensity);
 const lantern6 = new Lantern(2, lanternIntensity);
 const lantern7 = new Lantern(2, lanternIntensity);
 const lantern8 = new Lantern(2, lanternIntensity);
-let linkAreas = [new LinkArea("https://developer.mozilla.org/de/docs/Web/HTML/Element/aside", 15,10),
-                    new LinkArea("https://developer.mozilla.org/de/docs/Web/API/Canvas_API", 15,10),
-                    new LinkArea("https://developer.mozilla.org/de/docs/Web/HTML/Element/footer", 15,10),
-                    new LinkArea("https://developer.mozilla.org/de/docs/Web/HTML/Element/header",15,10),
-                    new LinkArea("https://developer.mozilla.org/de/docs/Web/HTML/Element/video", 15,10),
+let linkAreas = [   new LinkArea("https://developer.mozilla.org/" + locale + "/docs/Web/HTML/Element/aside", 15,10),
+                    new LinkArea("https://developer.mozilla.org/" + locale + "/docs/Web/API/Canvas_API", 15,10),
+                    new LinkArea("https://developer.mozilla.org/" + locale + "/docs/Web/HTML/Element/footer", 15,10),
+                    new LinkArea("https://developer.mozilla.org/" + locale + "/docs/Web/HTML/Element/header",15,10),
+                    new LinkArea("https://developer.mozilla.org/" + locale + "/docs/Web/HTML/Element/video", 15,10),
                     new LinkArea("https://developer.mozilla.org/en-US/docs/Web/HTML/Element/audio",15,10),
-                    new LinkArea("https://developer.mozilla.org/de/docs/Web/HTML/Element/nav",15,10),];
+                    new LinkArea("https://developer.mozilla.org/" + locale + "/docs/Web/HTML/Element/nav",15,10),];
 
 /**
  * Code Block responsible for switching to the 3D-World.
@@ -128,6 +129,11 @@ function loadAssets() {
 }
 
 function showPosition(position) {
+    if(position.coords.latitude < 55 && position.coords.latitude > 47 && position.coords.longitude > 6 && position.coords.longitude < 15) {
+        locale = "de";
+    } else {
+        locale = "en";
+    }
     console.log("Latitude:"+  position.coords.latitude, "longitude: " + position.coords.longitude);
 }
 function getLocation() {
@@ -289,6 +295,18 @@ function update(renderer, scene, camera) {
     let step = speed*clock.getDelta();
     objMove.moveKeyboardInput(step);
     checkLinkCollision();
+    if ('AmbientLightSensor' in window ) {
+        const sensor = new AmbientLightSensor();
+        sensor.addEventListener('reading', event => {
+            console.log('Current light level:', sensor.illuminance);
+        });
+        sensor.addEventListener('error', event => {
+            console.log(event.error.name, event.error.message);
+        });
+        sensor.start();
+    } else {
+      //  alert("no sensor here");
+    }
 
     requestAnimationFrame(function () {
             update(renderer, scene, camera);

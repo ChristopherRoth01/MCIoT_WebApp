@@ -9,10 +9,11 @@ let regex = new RegExp(expression);
  * Area which has a link to a webpage.
  */
 export class LinkArea extends THREE.Mesh {
-    link; w; h;
+    link; w; h;locale;
     constructor(link, w, h) {
         super();
         if(link.match(regex)) {
+            this.locale = "en";
             this.w = w;
             this.h = h;
             this.link = link;
@@ -62,6 +63,10 @@ export class LinkArea extends THREE.Mesh {
 
     getHeight() {
         return this.h;
+    }
+
+    setLocale() {
+
     }
 
 
