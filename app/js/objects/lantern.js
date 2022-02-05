@@ -16,7 +16,7 @@ export class Lantern {
         lanternLightMesh.position.y = scale *7/2;
         lanternLightMesh.position.z = 0;
         pointLight.position.x = lanternLightMesh.position.x;
-        pointLight.position.y = lanternLightMesh.position.y;
+        pointLight.position.y = lanternLightMesh.position.y + 2;
         pointLight.position.z = lanternLightMesh.position.z;
         this.lantern = new THREE.Group();
         this.lantern.add(pointLight);

@@ -63,12 +63,12 @@ const computerAudio = new Computer(audioTexture, 2);
 const computerNav = new Computer(navTexture, 2);
 const computerVideo = new Computer(videoTexture, 2);
 
-const computerLocation = new Computer();
+const computerLocation = new Computer(canvasTexture, 2);
 /**
  * Lanterns.
  * @type {number} intensity
  */
-let lanternIntensity = 0.5;
+let lanternIntensity = 1;
 const lantern = new Lantern(2, lanternIntensity);
 const lantern2 = new Lantern(2, lanternIntensity);
 const lantern3 = new Lantern(2, lanternIntensity);
@@ -180,6 +180,7 @@ async function main() {
     scene.add(computerAudio.getMesh());
     scene.add(computerNav.getMesh());
     scene.add(computerVideo.getMesh());
+    scene.add(computerLocation.getMesh());
 
     scene.add(lantern.getMesh());
     scene.add(lantern2.getMesh());
@@ -213,6 +214,7 @@ async function main() {
     computerVideo.setPosition(-90,0,0);
     computerAudio.setPosition(-120,0,0);
     computerNav.setPosition(-150,0,0);
+    computerLocation.setPosition(0 ,0, -190);
     linkAreas[0].setPosition(0, 0.2 , 30);
     linkAreas[1].setPosition(30, 0.2, 30);
     linkAreas[2].setPosition(-30,0.2,30);
@@ -268,13 +270,18 @@ function update(renderer, scene, camera) {
     let date = new Date();
     if(date.getHours() < 7) {
         console.log("intensity:"+0.3)
+        lanternIntensity = 1;
     } else if(date.getHours() < 12) {
         ambientLight.intensity = 0.6;
+        lanternIntensity = 0.1;
     } else if (date.getHours() < 17) {
         ambientLight.intensity = 0.9;
+        lanternIntensity = 0.1;
     } else if ( date.getHours() < 20) {
-        ambientLight.intensity = 0.4;
+        lanternIntensity = 0.6;
+        ambientLight.intensity = 0.6;
     } else if( date.getHours() < 24) {
+        lanternIntensity = 1;
         ambientLight.intensity = 0.2;
     }
     let speed = 10;

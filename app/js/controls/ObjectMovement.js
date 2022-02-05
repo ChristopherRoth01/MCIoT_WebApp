@@ -45,6 +45,8 @@ export class ObjectMovement {
             this.camera.position.z += this.step;
             let img = keyDown.children[0];
             img.setAttribute("src", "img/keyBoard/tastaturKeysWeißDown.jpg");
+        } else {
+            this.reset();
         }
     }
 
