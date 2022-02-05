@@ -23,13 +23,13 @@ export class Monitor extends THREE.Mesh {
         const screenBackGround = new THREE.Mesh(screenBackGroundGeometry, materialBlack);
         const screen = new THREE.Mesh(screenGeometry, materialScreen);
 
-        monitorStand.position.x = -1.5*scale;
-        monitorStand.position.y = 2.5*scale;
-        monitorStand.position.z = 1.5*scale;
+        monitorStand.position.x = -1.5 * scale;
+        monitorStand.position.y = 2.5 * scale;
+        monitorStand.position.z = 1.5 * scale;
 
-        screenBackGround.position.x = -1.5*scale;
-        screenBackGround.position.y = 6*scale;
-        screenBackGround.position.z = 2 *scale;
+        screenBackGround.position.x = -1.5 * scale;
+        screenBackGround.position.y = 6 * scale;
+        screenBackGround.position.z = 2 * scale;
 
         screen.position.x = -1.5*scale;
         screen.position.y = 6*scale;
