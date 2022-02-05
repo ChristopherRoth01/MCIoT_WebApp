@@ -289,18 +289,6 @@ function update(renderer, scene, camera) {
     let step = speed*clock.getDelta();
     objMove.moveKeyboardInput(step);
     checkLinkCollision();
-    if ( 'AmbientLightSensor' in window ) {
-        const sensor = new AmbientLightSensor();
-        sensor.addEventListener('reading', event => {
-            console.log('Current light level:', sensor.illuminance);
-        });
-        sensor.addEventListener('error', event => {
-            console.log(event.error.name, event.error.message);
-        });
-        sensor.start();
-    } else {
-        alert("no sensor here");
-    }
 
     requestAnimationFrame(function () {
             update(renderer, scene, camera);
