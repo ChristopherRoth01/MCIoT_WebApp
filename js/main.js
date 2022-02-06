@@ -6,6 +6,7 @@ import {LinkArea} from "./objects/linkarea.js";
 import {Lantern} from "./objects/lantern.js";
 import {Box} from "./objects/box.js";
 
+let locale = "de"; //englisch ist default wert.
 const gltfLoader = new GLTFLoader();
 const loader = new THREE.TextureLoader();
 const renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -77,14 +78,26 @@ const lantern5 = new Lantern(2, lanternIntensity);
 const lantern6 = new Lantern(2, lanternIntensity);
 const lantern7 = new Lantern(2, lanternIntensity);
 const lantern8 = new Lantern(2, lanternIntensity);
-let linkAreas = [new LinkArea("https://developer.mozilla.org/de/docs/Web/HTML/Element/aside", 15,10),
-                    new LinkArea("https://developer.mozilla.org/de/docs/Web/API/Canvas_API", 15,10),
-                    new LinkArea("https://developer.mozilla.org/de/docs/Web/HTML/Element/footer", 15,10),
-                    new LinkArea("https://developer.mozilla.org/de/docs/Web/HTML/Element/header",15,10),
-                    new LinkArea("https://developer.mozilla.org/de/docs/Web/HTML/Element/video", 15,10),
-                    new LinkArea("https://developer.mozilla.org/en-US/docs/Web/HTML/Element/audio",15,10),
-                    new LinkArea("https://developer.mozilla.org/de/docs/Web/HTML/Element/nav",15,10),];
 
+let linkAreas = [];
+async function fillLinkAreas() {
+    linkAreas = [   new LinkArea("https://developer.mozilla.org/", locale,"/docs/Web/HTML/Element/aside", 15,10),
+        new LinkArea("https://developer.mozilla.org/", locale, "/docs/Web/API/Canvas_API", 15,10),
+        new LinkArea("https://developer.mozilla.org/" , locale, "/docs/Web/HTML/Element/footer", 15,10),
+        new LinkArea("https://developer.mozilla.org/", locale,"/docs/Web/HTML/Element/header",15,10),
+        new LinkArea("https://developer.mozilla.org/", locale, "/docs/Web/HTML/Element/video", 15,10),
+        new LinkArea("https://developer.mozilla.org/", locale, "/docs/Web/HTML/Element/audio",15,10),
+        new LinkArea("https://developer.mozilla.org/", locale,"/docs/Web/HTML/Element/nav",15,10),];
+}
+
+/*let linkAreas = [   new LinkArea("https://developer.mozilla.org/", locale,"/docs/Web/HTML/Element/aside", 15,10),
+                    new LinkArea("https://developer.mozilla.org/", locale, "/docs/Web/API/Canvas_API", 15,10),
+                    new LinkArea("https://developer.mozilla.org/" , locale, "/docs/Web/HTML/Element/footer", 15,10),
+                    new LinkArea("https://developer.mozilla.org/", locale,"/docs/Web/HTML/Element/header",15,10),
+                    new LinkArea("https://developer.mozilla.org/", locale, "/docs/Web/HTML/Element/video", 15,10),
+                    new LinkArea("https://developer.mozilla.org/", locale, "/docs/Web/HTML/Element/audio",15,10),
+                    new LinkArea("https://developer.mozilla.org/", locale,"/docs/Web/HTML/Element/nav",15,10),];
+*/
 /**
  * Code Block responsible for switching to the 3D-World.
  */
@@ -128,6 +141,13 @@ function loadAssets() {
 }
 
 function showPosition(position) {
+    console.log("getting called");
+    if(position.coords.latitude < 55 && position.coords.latitude > 47 && position.coords.longitude > 6 && position.coords.longitude < 15) {
+        locale = "de";
+    } else {
+        locale = "en";
+    }
+
     console.log("Latitude:"+  position.coords.latitude, "longitude: " + position.coords.longitude);
 }
 function getLocation() {
@@ -204,9 +224,11 @@ async function main() {
     scene.add(street2.getMesh());
     scene.add(street3.getMesh());
     scene.add(street4.getMesh());
-    for(let i = 0; i < linkAreas.length; i++) {
-        scene.add(linkAreas[i].getMesh());
-    }
+    fillLinkAreas().then(r => {
+        for(let i = 0; i < linkAreas.length; i++) {
+            scene.add(linkAreas[i].getMesh());
+        }
+    })
     await loadAssets();
     computerCanvas.setPosition(30,0,0);
     computerFooter.setPosition(-30,0,0);
@@ -217,10 +239,10 @@ async function main() {
     computerLocation.setPosition(0 ,0, -190);
     linkAreas[0].setPosition(0, 0.2 , 30);
     linkAreas[1].setPosition(30, 0.2, 30);
-    linkAreas[2].setPosition(-30,0.2,30);
-    linkAreas[3].setPosition(-60,0.2,30);
-    linkAreas[4].setPosition(-90,0.2,30);
-    linkAreas[5].setPosition(-120,0.2,30);
+    linkAreas[2].setPosition(-30, 0.2, 30);
+    linkAreas[3].setPosition(-60, 0.2, 30);
+    linkAreas[4].setPosition(-90, 0.2, 30);
+    linkAreas[5].setPosition(-120, 0.2,30);
     linkAreas[6].setPosition(-150, 0.2, 30);
 
     renderer.shadowMap.enabled = true;
@@ -289,7 +311,21 @@ function update(renderer, scene, camera) {
     let step = speed*clock.getDelta();
     objMove.moveKeyboardInput(step);
     checkLinkCollision();
-
+    if ('AmbientLightSensor' in window ) {
+        const sensor = new AmbientLightSensor();
+        sensor.addEventListener('reading', event => {
+            console.log('Current light level:', sensor.illuminance);
+        });
+        sensor.addEventListener('error', event => {
+            console.log(event.error.name, event.error.message);
+        });
+        sensor.start();
+    } else {
+      //  alert("no sensor here");
+    }
+    for(let linkarea of linkAreas) {
+        linkarea.setLocale(locale);
+    }
     requestAnimationFrame(function () {
             update(renderer, scene, camera);
         }
