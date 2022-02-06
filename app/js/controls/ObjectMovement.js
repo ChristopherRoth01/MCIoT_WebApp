@@ -21,7 +21,7 @@ export class ObjectMovement {
         keyLeft.children[0].setAttribute("src", "img/keyBoard/tastaturKeyLeftSchwarz.png");
     }
 
-    moveKeyboardInput() {
+     moveKeyboardInput() {
         if (keyboard.pressed("D")) {
             this.sphere.position.x += this.step;
             this.sphere.rotation.y = 0.5*Math.PI;

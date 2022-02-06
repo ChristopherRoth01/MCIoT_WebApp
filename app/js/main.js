@@ -38,11 +38,11 @@ const ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
 const floor = generateFloor(floorWidth, floorDepth);
 const street = new Box(250,0.2, 30, 'rgb(88, 88, 88)');
 const street2 = new Box(30,0.2, 200, 'rgb(88, 88, 88)');
-const street3 = new Box(200,0.2, 30, 'rgb(88, 88, 88)');
+const street3 = new Box(250,0.2, 30, 'rgb(88, 88, 88)');
 const street4 = new Box(30, 0.2,100,'rgb(88, 88, 88)');
 street.setPosition(-50,0.05,70);
 street2.setPosition(60,0.05,-40);
-street3.setPosition(30,0.05, -140);
+street3.setPosition(40,0.05, -140);
 street4.setPosition(-180,0,105);
 const gui = new dat.GUI();
 const defaultStep = 0.6;
@@ -55,6 +55,14 @@ const footerTexture = loader.load('img/textures/footerTagTexture.jpg');
 const audioTexture = loader.load('img/textures/audioTagTexture.jpg');
 const navTexture = loader.load('img/textures/navTagTexture.jpg');
 const videoTexture = loader.load('img/textures/videoTagTexture.jpg');
+const absoluteOSensorTexture = loader.load('img/textures/absoluteOSensorTexture.png');
+const accelerometerTexture = loader.load('img/textures/accelerometerTexture.png');
+const ambientLSensorTexture = loader.load('img/textures/ambientLSensorTexture.png');
+const gravitySensorTexture = loader.load('img/textures/gravitySensorTexture.png');
+const gyroscopeTexture = loader.load('img/textures/gyroscopeTexture.png');
+const linearAccSensorTexture = loader.load('img/textures/linearASensorTexture.png');
+const magnetometerTexture = loader.load('img/textures/magnetometerTexture.png');
+const relativeOSensorTexture = loader.load('img/textures/relativeOSensorTexture.png');
 
 const computerCanvas = new Computer(canvasTexture, 2);
 const computerAside = new Computer(asideTexture, 2);
@@ -63,6 +71,14 @@ const computerFooter = new Computer(footerTexture, 2);
 const computerAudio = new Computer(audioTexture, 2);
 const computerNav = new Computer(navTexture, 2);
 const computerVideo = new Computer(videoTexture, 2);
+const computerAbsoluteOSensor = new Computer(absoluteOSensorTexture,2);
+const computerAccelerometer = new Computer(accelerometerTexture,2);
+const computerAmbientLSensor = new Computer(ambientLSensorTexture, 2);
+const computerGravitySensor = new Computer(gravitySensorTexture, 2);
+const computerGyroscope = new Computer(gyroscopeTexture, 2);
+const computerLinearAccSensor = new Computer(linearAccSensorTexture, 2);
+const computerMagnetometer = new Computer(magnetometerTexture,2);
+const computerRelativeOSensor = new Computer(relativeOSensorTexture, 2);
 
 const computerLocation = new Computer(canvasTexture, 2);
 /**
@@ -78,6 +94,11 @@ const lantern5 = new Lantern(2, lanternIntensity);
 const lantern6 = new Lantern(2, lanternIntensity);
 const lantern7 = new Lantern(2, lanternIntensity);
 const lantern8 = new Lantern(2, lanternIntensity);
+const lantern9 = new Lantern(2, lanternIntensity);
+const lantern10 = new Lantern(2, lanternIntensity);
+const lantern11 = new Lantern(2, lanternIntensity);
+const lantern12 = new Lantern(2, lanternIntensity);
+const lantern13 = new Lantern(2, lanternIntensity);
 
 let linkAreas = [];
 async function fillLinkAreas() {
@@ -87,17 +108,19 @@ async function fillLinkAreas() {
         new LinkArea("https://developer.mozilla.org/", locale,"/docs/Web/HTML/Element/header",15,10),
         new LinkArea("https://developer.mozilla.org/", locale, "/docs/Web/HTML/Element/video", 15,10),
         new LinkArea("https://developer.mozilla.org/", locale, "/docs/Web/HTML/Element/audio",15,10),
-        new LinkArea("https://developer.mozilla.org/", locale,"/docs/Web/HTML/Element/nav",15,10),];
+        new LinkArea("https://developer.mozilla.org/", locale,"/docs/Web/HTML/Element/nav",15,10),
+        new LinkArea("https://developer.mozilla.org/", locale,"/docs/Web/API/AbsoluteOrientationSensor",15,10), //absoluteOrientationSensor
+        new LinkArea("https://developer.mozilla.org/", locale,"/docs/Web/API/Accelerometer",15,10), //accelerometer
+        new LinkArea("https://developer.mozilla.org/", locale,"/docs/Web/API/AmbientLightSensor",15,10), //ambientlightSensor
+        new LinkArea("https://developer.mozilla.org/", locale,"/docs/Web/API/GravitySensor",15,10), //gravitySensor
+        new LinkArea("https://developer.mozilla.org/", locale, "/docs/Web/API/Gyroscope",15,10), //gyroscope
+        new LinkArea("https://developer.mozilla.org/", locale,"/docs/Web/API/LinearAccelerationSensor",15,10), //linearAccSensor
+        new LinkArea("https://developer.mozilla.org/", locale,"/docs/Web/API/Magnetometer",15,10), //magnetometer
+        new LinkArea("https://developer.mozilla.org/", locale,"/docs/Web/API/RelativeOrientationSensor",15,10), //relativeOrientationSensor
+    ];
 }
 
-/*let linkAreas = [   new LinkArea("https://developer.mozilla.org/", locale,"/docs/Web/HTML/Element/aside", 15,10),
-                    new LinkArea("https://developer.mozilla.org/", locale, "/docs/Web/API/Canvas_API", 15,10),
-                    new LinkArea("https://developer.mozilla.org/" , locale, "/docs/Web/HTML/Element/footer", 15,10),
-                    new LinkArea("https://developer.mozilla.org/", locale,"/docs/Web/HTML/Element/header",15,10),
-                    new LinkArea("https://developer.mozilla.org/", locale, "/docs/Web/HTML/Element/video", 15,10),
-                    new LinkArea("https://developer.mozilla.org/", locale, "/docs/Web/HTML/Element/audio",15,10),
-                    new LinkArea("https://developer.mozilla.org/", locale,"/docs/Web/HTML/Element/nav",15,10),];
-*/
+
 /**
  * Code Block responsible for switching to the 3D-World.
  */
@@ -124,7 +147,7 @@ document.addEventListener("keydown", (ev => {
 let car;
 let count = 1;
 
-function loadAssets() {
+async function loadAssets() {
     gltfLoader.load('3dObjects/free_car_001_size3.glb', function (gltf) {
         if(count === 1) {
             car = gltf.scene;
@@ -201,6 +224,14 @@ async function main() {
     scene.add(computerNav.getMesh());
     scene.add(computerVideo.getMesh());
     scene.add(computerLocation.getMesh());
+    scene.add(computerAbsoluteOSensor.getMesh());
+    scene.add(computerAccelerometer.getMesh());
+    scene.add(computerAmbientLSensor.getMesh());
+    scene.add(computerGravitySensor.getMesh());
+    scene.add(computerGyroscope.getMesh());
+    scene.add(computerLinearAccSensor.getMesh());
+    scene.add(computerMagnetometer.getMesh());
+    scene.add(computerRelativeOSensor.getMesh());
 
     scene.add(lantern.getMesh());
     scene.add(lantern2.getMesh());
@@ -210,16 +241,25 @@ async function main() {
     scene.add(lantern6.getMesh());
     scene.add(lantern7.getMesh());
     scene.add(lantern8.getMesh());
+    scene.add(lantern9.getMesh());
+    scene.add(lantern10.getMesh());
+    scene.add(lantern11.getMesh());
+    scene.add(lantern12.getMesh());
+    scene.add(lantern13.getMesh());
 
     lantern.setPosition(30,7,100);
     lantern2.setPosition(-30,7,100);
     lantern3.setPosition(-90,7,100);
     lantern4.setPosition(-150,7,100);
     lantern5.setPosition(90,7, 100);
-    lantern6.setPosition(90,7, 40);
-    lantern7.setPosition(90,7, -20);
-    lantern8.setPosition(90,7, -80);
-
+    lantern6.setPosition(90,7, 50);
+    lantern7.setPosition(90,7, -0);
+    lantern8.setPosition(90,7, -50);
+    lantern9.setPosition(90,7,-100);
+    lantern10.setPosition(40,7,-100);
+    lantern11.setPosition(-10,7,-100);
+    lantern12.setPosition(140,7,-100);
+    lantern13.setPosition(-60,7,-100);
     scene.add(street.getMesh());
     scene.add(street2.getMesh());
     scene.add(street3.getMesh());
@@ -229,14 +269,24 @@ async function main() {
             scene.add(linkAreas[i].getMesh());
         }
     })
-    await loadAssets();
+    await loadAssets().then(r => {
+        console.log("assets loaded");
+    });
     computerCanvas.setPosition(30,0,0);
     computerFooter.setPosition(-30,0,0);
     computerHeader.setPosition(-60,0,0);
     computerVideo.setPosition(-90,0,0);
     computerAudio.setPosition(-120,0,0);
     computerNav.setPosition(-150,0,0);
-    computerLocation.setPosition(0 ,0, -190);
+    computerAbsoluteOSensor.setPosition(-60,0,-200);
+    computerAccelerometer.setPosition( -30,0,-200);
+    computerAmbientLSensor.setPosition(0,0,-200);
+    computerGravitySensor.setPosition(30,0,-200);
+    computerGyroscope.setPosition(60,0,-200);
+    computerLinearAccSensor.setPosition(90,0,-200);
+    computerMagnetometer.setPosition(120,0,-200);
+    computerRelativeOSensor.setPosition(150,0,-200);
+
     linkAreas[0].setPosition(0, 0.2 , 30);
     linkAreas[1].setPosition(30, 0.2, 30);
     linkAreas[2].setPosition(-30, 0.2, 30);
@@ -244,6 +294,15 @@ async function main() {
     linkAreas[4].setPosition(-90, 0.2, 30);
     linkAreas[5].setPosition(-120, 0.2,30);
     linkAreas[6].setPosition(-150, 0.2, 30);
+    linkAreas[7].setPosition(-60,0.2,-170);
+    linkAreas[8].setPosition(-30,0.2,-170);
+    linkAreas[9].setPosition(0,0.2,-170);
+    linkAreas[10].setPosition(30,0.2,-170);
+    linkAreas[11].setPosition(60,0.2,-170);
+    linkAreas[12].setPosition(90,0.2,-170);
+    linkAreas[13].setPosition(120,0.2,-170);
+    linkAreas[14].setPosition(150,0.2,-170);
+
 
     renderer.shadowMap.enabled = true;
     renderer.setSize(window.innerWidth, window.innerHeight);
@@ -311,18 +370,7 @@ function update(renderer, scene, camera) {
     let step = speed*clock.getDelta();
     objMove.moveKeyboardInput(step);
     checkLinkCollision();
-    if ('AmbientLightSensor' in window ) {
-        const sensor = new AmbientLightSensor();
-        sensor.addEventListener('reading', event => {
-            console.log('Current light level:', sensor.illuminance);
-        });
-        sensor.addEventListener('error', event => {
-            console.log(event.error.name, event.error.message);
-        });
-        sensor.start();
-    } else {
-      //  alert("no sensor here");
-    }
+
     for(let linkarea of linkAreas) {
         linkarea.setLocale(locale);
     }
