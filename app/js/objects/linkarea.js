@@ -9,14 +9,14 @@ let regex = new RegExp(expression);
  * Area which has a link to a webpage.
  */
 export class LinkArea extends THREE.Mesh {
-    link; w; h;locale;
-    constructor(link, w, h) {
+    start;appendix; w; h;locale;
+    constructor(start, locale,appendix, w, h) {
         super();
-        if(link.match(regex)) {
-            this.locale = "en";
+            this.start = start;
+            this.appendix = appendix;
+            this.locale = locale;
             this.w = w;
             this.h = h;
-            this.link = link;
             this.group = new THREE.Group;
             this.geo = new THREE.PlaneGeometry(this.w, this.h);
             this.bordergeo = new THREE.PlaneGeometry(this.w + 2, this.h + 2);
@@ -34,17 +34,17 @@ export class LinkArea extends THREE.Mesh {
             this.mesh.position.z = -0.1;
             this.group.add(this.borderMesh)
             this.group.rotation.x = Math.PI / 2;
-        } else {
-            alert("Das hat nicht funktioniert");
-        }
+
     }
 
-    assignNewLink(link) {
-        this.link = link;
+    assignNewLink(start,locale,appendix) {
+        this.start = start;
+        this.locale = locale;
+        this.appendix = appendix;
     }
 
     openUrl() {
-        window.open(this.link,'mywindow','width=400,height=200,toolbar=yes,location=yes,directories=yes,status=yes,menubar=yes,scrollbars=yes,copyhistory=yes,resizable=yes')
+        window.open(this.start+this.locale+this.appendix,'mywindow','width=400,height=200,toolbar=yes,location=yes,directories=yes,status=yes,menubar=yes,scrollbars=yes,copyhistory=yes,resizable=yes')
     }
 
     getMesh() {
@@ -65,8 +65,8 @@ export class LinkArea extends THREE.Mesh {
         return this.h;
     }
 
-    setLocale() {
-
+    setLocale(locale) {
+        this.locale = locale;
     }
 
 
