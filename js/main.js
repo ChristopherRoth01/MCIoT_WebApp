@@ -9,7 +9,7 @@ import {Box} from "./objects/box.js";
 let locale = "de"; //englisch ist default wert.
 const gltfLoader = new GLTFLoader();
 const loader = new THREE.TextureLoader();
-const renderer = new THREE.WebGLRenderer({ antialias: true });
+const renderer = new THREE.WebGLRenderer({ antialias: true, canvas: webgl});
 /**
  * The scene, which gets rendered by the @renderer.
  * @type {Scene}
@@ -47,7 +47,6 @@ street4.setPosition(-180,0,105);
 const gui = new dat.GUI();
 const defaultStep = 0.6;
 let objMove = new ObjectMovement(null, null, null) ;
-
 const canvasTexture = loader.load('img/textures/canvasTexture.jpg');
 const asideTexture = loader.load('img/textures/asideTagTexture.jpg');
 const headerTexture = loader.load('img/textures/headerTagTexture.jpg');
@@ -79,8 +78,6 @@ const computerGyroscope = new Computer(gyroscopeTexture, 2);
 const computerLinearAccSensor = new Computer(linearAccSensorTexture, 2);
 const computerMagnetometer = new Computer(magnetometerTexture,2);
 const computerRelativeOSensor = new Computer(relativeOSensorTexture, 2);
-
-const computerLocation = new Computer(canvasTexture, 2);
 /**
  * Lanterns.
  * @type {number} intensity
@@ -120,6 +117,11 @@ async function fillLinkAreas() {
     ];
 }
 
+document.getElementById('leftControl').addEventListener('touchstart',moveLeft);
+
+function moveLeft() {
+    console.log("moving left!");
+}
 
 /**
  * Code Block responsible for switching to the 3D-World.
@@ -223,7 +225,6 @@ async function main() {
     scene.add(computerAudio.getMesh());
     scene.add(computerNav.getMesh());
     scene.add(computerVideo.getMesh());
-    scene.add(computerLocation.getMesh());
     scene.add(computerAbsoluteOSensor.getMesh());
     scene.add(computerAccelerometer.getMesh());
     scene.add(computerAmbientLSensor.getMesh());
@@ -307,7 +308,6 @@ async function main() {
     renderer.shadowMap.enabled = true;
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setClearColor('rgb(255,255,255)');
-    document.getElementById("webgl").appendChild(renderer.domElement);
     return scene;
 }
 

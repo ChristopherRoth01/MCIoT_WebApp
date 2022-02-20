@@ -8,7 +8,6 @@
     <title>HTML5 Features</title>
     <link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap.css">
     <link rel="stylesheet" type="text/css" href="css/main.css">
-
 </head>
 <body>
     <div id="startDiv" class="container full-height center">
@@ -16,12 +15,14 @@
         <button class="btn btn-primary" id="start">Start</button>
     </div>
         <div id="gameCounter" style="display: none"></div>
-        <div id="webgl" style="display: none"></div>
+        <canvas id="webgl" style="display: none"></canvas>
         <div id="keyBoardControls" style="display:none;" class="col-xs-4">
             <div id="leftControl" class="keycontrols"><img src="" alt=""></div>
             <div id="topControl" class="keycontrols"><img src="" alt=""></div>
             <div id="bottomControl" class="keycontrols"><img src="" alt=""></div>
             <div id="rightControl" class="keycontrols"><img src="" alt=""></div>
+        </div>
+        <div>
         </div>
     <script src="lib/three/build/three.js"></script>
     <script type="module" src="lib/three/build/three.module.js"></script>
