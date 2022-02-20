@@ -120,7 +120,7 @@ async function fillLinkAreas() {
 document.getElementById('leftControl').addEventListener('touchstart',moveLeft);
 
 function moveLeft() {
-    console.log("moving left!");
+    objMove.sphere.position.x =20;
 }
 
 /**
@@ -368,7 +368,7 @@ function update(renderer, scene, camera) {
     let speed = 10;
     renderer.render(scene, camera);
     let step = speed*clock.getDelta();
-    objMove.moveKeyboardInput(step);
+    objMove.moveKeyboardInput(step);x
     checkLinkCollision();
 
     for(let linkarea of linkAreas) {
